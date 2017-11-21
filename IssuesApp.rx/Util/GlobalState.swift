@@ -149,16 +149,16 @@ extension Reactive where Base: GlobalState {
     }
 }
 
-//extension GlobalState.ServiceType {
-//    public var api: API {
-//        switch self {
-//        case .github:
-//            return GithubAPI()
-//        case .bitbucket:
-//            return BitbucketAPI()
-//        }
-//    }
-//}
+extension GlobalState.ServiceType {
+    public var api: API {
+        switch self {
+        case .github:
+            return GitHubAPI()
+        case .bitbucket:
+            return BitbucketAPI()
+        }
+    }
+}
 
 
 

@@ -7,15 +7,22 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import OAuthSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var disposeBag: DisposeBag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        GlobalState.instance.rx.isLoggedIn.filter { !$0 }.delay(0.0, scheduler: MainScheduler.instance).subscribe(onNext: { _ in
+            let loginViewcontroller = LoginViewController.viewController
+            self.window?.rootViewController?.present(loginViewcontroller, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
         
         return true
     }
@@ -41,7 +48,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("url: \(url.absoluteString)")
+        if (url.host == "oauth-callback") {
+            OAuthSwift.handle(url: url)
+        }
+        return true
+    }
+    
 
 }
 
