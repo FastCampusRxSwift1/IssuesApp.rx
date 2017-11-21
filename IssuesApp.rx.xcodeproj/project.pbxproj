@@ -15,6 +15,7 @@
 		D79CF4011FC46E5D00022F58 /* BitBucketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4001FC46E5D00022F58 /* BitBucketAPI.swift */; };
 		D79CF4041FC475EC00022F58 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4031FC475EC00022F58 /* LoginViewController.swift */; };
 		D79CF4061FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */; };
+		D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4071FC4914C00022F58 /* RepoViewController.swift */; };
 		D7F92C311FC15F0100BAC2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F92C301FC15F0100BAC2E1 /* AppDelegate.swift */; };
 		D7F92C361FC15F0100BAC2E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7F92C341FC15F0100BAC2E1 /* Main.storyboard */; };
 		D7F92C381FC15F0100BAC2E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7F92C371FC15F0100BAC2E1 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		D79CF4001FC46E5D00022F58 /* BitBucketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitBucketAPI.swift; sourceTree = "<group>"; };
 		D79CF4031FC475EC00022F58 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControlelrFromStoryBoard.swift; sourceTree = "<group>"; };
+		D79CF4071FC4914C00022F58 /* RepoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoViewController.swift; sourceTree = "<group>"; };
 		D7F92C2D1FC15F0100BAC2E1 /* IssuesApp.rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IssuesApp.rx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7F92C301FC15F0100BAC2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7F92C351FC15F0100BAC2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			children = (
 				D79CF4031FC475EC00022F58 /* LoginViewController.swift */,
 				D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */,
+				D79CF4071FC4914C00022F58 /* RepoViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				D7F92C4A1FC2B62600BAC2E1 /* Test1ViewController.swift in Sources */,
 				D79CF3FF1FC46DF000022F58 /* App.swift in Sources */,
 				D79CF4011FC46E5D00022F58 /* BitBucketAPI.swift in Sources */,
+				D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */,
 				D7F92C471FC1733A00BAC2E1 /* Optional+Extension.swift in Sources */,
 				D79CF3F71FC33B4D00022F58 /* GlobalStatable.swift in Sources */,
 				D7F92C311FC15F0100BAC2E1 /* AppDelegate.swift in Sources */,
