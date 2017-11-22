@@ -10,42 +10,65 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class RepoViewController: UIViewController {
+protocol SeguewayConstantable {
+    associatedtype Constants
+}
 
+class RepoViewController: UIViewController, SeguewayConstantable {
+    enum Constants: String {
+        case pushToIssueSegue
+        case presentToReposSegue
+        case none
+    }
+    
     @IBOutlet var ownerTextField: UITextField!
     @IBOutlet var repoTextField: UITextField!
     @IBOutlet var enterButton: UIButton!
     @IBOutlet var logoutButton: UIButton!
+    
     var disposeBag: DisposeBag = DisposeBag()
+    var repoSelectedSubject: PublishSubject<Repo> = PublishSubject()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ownerTextField.text = GlobalState.instance.owner
+        repoTextField.text = GlobalState.instance.repo
         bind()
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-
-    /*
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let segueIdentifier: Constants = Constants(rawValue: segue.identifier ?? "") ?? .none
+        switch segueIdentifier {
+        case .pushToIssueSegue:
+            let owner = ownerTextField.text ?? ""
+            let repo = repoTextField.text ?? ""
+            GlobalState.instance.owner = owner
+            GlobalState.instance.repo = repo
+            GlobalState.instance.addRepo(owner: owner, repo: repo)
+            break
+        case .presentToReposSegue:
+            guard let navigationController = segue.destination as? UINavigationController else { return }
+            guard let viewController = navigationController.topViewController as? ReposViewController else { return }
+            viewController.repoSelectedSubject = repoSelectedSubject
+            break
+        case .none:
+            break
+        }
     }
-    */
-
 }
 
 extension RepoViewController {
     func bind() {
-        logoutButton.rx.tap.subscribe(onNext: {
-            GlobalState.instance.token = nil
-        }).disposed(by: disposeBag)
+        logoutButton.rx.tap
+            .subscribe(onNext: {
+                GlobalState.instance.token = nil
+            }).disposed(by: disposeBag)
+        
+        repoSelectedSubject
+            .subscribe(onNext: { [weak self] repo in
+                self?.performSegue(withIdentifier: Constants.pushToIssueSegue.rawValue, sender: repo)
+            }).disposed(by: disposeBag)
     }
 }

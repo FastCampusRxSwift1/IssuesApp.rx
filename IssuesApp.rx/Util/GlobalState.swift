@@ -63,6 +63,16 @@ final class GlobalState {
         }
     }
     
+    var repo: String {
+        get {
+            let owner = UserDefaults.standard.string(forKey: Constants.repoKey.rawValue) ?? ""
+            return owner
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Constants.repoKey.rawValue)
+        }
+    }
+    
     var service: ServiceType {
         get {
             let serviceValue = UserDefaults.standard.string(forKey: Constants.serviceTypeKey.rawValue)
@@ -94,7 +104,7 @@ final class GlobalState {
 
 extension GlobalState: ReactiveCompatible {
     func rxInit() {
-        self.rx.serviceType.distinctUntilChanged()
+        self.rx.serviceType.distinctUntilChanged().skip(1)
             .flatMap { _ -> Observable<Repos> in
                 return Observable<Repos>.just(Repos(repos: []))
             }.bind { (repos: Repos) in

@@ -48,9 +48,13 @@ struct Repo {
     var owner: String
 }
 
-extension Repo: GlobalStatable {
+extension Repo: GlobalStatable, Hashable {
     static func ==(lhs: Repo, rhs: Repo) -> Bool {
         return lhs.repo == rhs.repo && lhs.owner == rhs.owner
+    }
+    
+    var hashValue: Int {
+        return repo.hashValue ^ owner.hashValue
     }
     
     var writeValue: [String: String] {
@@ -66,7 +70,7 @@ extension Repo: GlobalStatable {
 struct Repos {
     var repos: [Repo]
     func add(repo: Repo) -> Repos {
-        guard let newRepos = NSSet(array: repos + [repo] ).allObjects as? [Repo] else { return self }
+        let newRepos = Set<Repo>(repos + [repo]).map{$0}
         return Repos(repos: newRepos)
     }
 }
