@@ -247,10 +247,10 @@
             </objects>
             <point key="canvasLocation" x="1713" y="-160"/>
         </scene>
-        <!--View Controller-->
+        <!--Issues View Controller-->
         <scene sceneID="caP-6k-3Fs">
             <objects>
-                <viewController id="x7F-jc-i2i" sceneMemberID="viewController">
+                <viewController id="x7F-jc-i2i" customClass="IssuesViewController" customModule="IssuesApp_rx" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ELV-pd-JS9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

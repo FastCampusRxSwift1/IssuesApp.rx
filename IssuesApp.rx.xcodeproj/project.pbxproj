@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A7692C440EE031AB6C754F38 /* Pods_IssuesApp_rx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDD3A93DE0578F0843E9ED64 /* Pods_IssuesApp_rx.framework */; };
 		D744836E1FC5AE6C00C1A048 /* ReposViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */; };
+		D74483711FC5C7A200C1A048 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483701FC5C7A200C1A048 /* IssuesViewController.swift */; };
+		D74483741FC5C98E00C1A048 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483731FC5C98E00C1A048 /* Model.swift */; };
 		D79CF3F71FC33B4D00022F58 /* GlobalStatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3F61FC33B4D00022F58 /* GlobalStatable.swift */; };
 		D79CF3FA1FC46A5800022F58 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3F91FC46A5800022F58 /* API.swift */; };
 		D79CF3FC1FC46AF900022F58 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3FB1FC46AF900022F58 /* GitHubAPI.swift */; };
@@ -31,6 +33,8 @@
 		640DE4201C873328777EC7AD /* Pods-IssuesApp.rx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IssuesApp.rx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-IssuesApp.rx/Pods-IssuesApp.rx.debug.xcconfig"; sourceTree = "<group>"; };
 		CDD3A93DE0578F0843E9ED64 /* Pods_IssuesApp_rx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IssuesApp_rx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposViewController.swift; sourceTree = "<group>"; };
+		D74483701FC5C7A200C1A048 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
+		D74483731FC5C98E00C1A048 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		D79CF3F61FC33B4D00022F58 /* GlobalStatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStatable.swift; sourceTree = "<group>"; };
 		D79CF3F91FC46A5800022F58 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		D79CF3FB1FC46AF900022F58 /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
@@ -81,6 +85,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D74483721FC5C97D00C1A048 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D74483731FC5C98E00C1A048 /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D79CF3F81FC46A4C00022F58 /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +110,7 @@
 				D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */,
 				D79CF4071FC4914C00022F58 /* RepoViewController.swift */,
 				D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */,
+				D74483701FC5C7A200C1A048 /* IssuesViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -123,6 +136,7 @@
 		D7F92C2F1FC15F0100BAC2E1 /* IssuesApp.rx */ = {
 			isa = PBXGroup;
 			children = (
+				D74483721FC5C97D00C1A048 /* Model */,
 				D79CF4021FC475D600022F58 /* View */,
 				D7F92C481FC2B60F00BAC2E1 /* Test */,
 				D7F92C421FC16ABC00BAC2E1 /* Util */,
@@ -307,12 +321,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D74483711FC5C7A200C1A048 /* IssuesViewController.swift in Sources */,
 				D79CF4041FC475EC00022F58 /* LoginViewController.swift in Sources */,
 				D7F92C4C1FC2B63100BAC2E1 /* Test2ViewController.swift in Sources */,
 				D7F92C4A1FC2B62600BAC2E1 /* Test1ViewController.swift in Sources */,
 				D79CF3FF1FC46DF000022F58 /* App.swift in Sources */,
 				D79CF4011FC46E5D00022F58 /* BitBucketAPI.swift in Sources */,
 				D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */,
+				D74483741FC5C98E00C1A048 /* Model.swift in Sources */,
 				D7F92C471FC1733A00BAC2E1 /* Optional+Extension.swift in Sources */,
 				D79CF3F71FC33B4D00022F58 /* GlobalStatable.swift in Sources */,
 				D7F92C311FC15F0100BAC2E1 /* AppDelegate.swift in Sources */,
