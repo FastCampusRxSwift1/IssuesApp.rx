@@ -11,6 +11,14 @@
 		D744836E1FC5AE6C00C1A048 /* ReposViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */; };
 		D74483711FC5C7A200C1A048 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483701FC5C7A200C1A048 /* IssuesViewController.swift */; };
 		D74483741FC5C98E00C1A048 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483731FC5C98E00C1A048 /* Model.swift */; };
+		D74483771FC5CD8000C1A048 /* CellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483761FC5CD8000C1A048 /* CellProtocol.swift */; };
+		D74483791FC5CE9200C1A048 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483781FC5CE9200C1A048 /* IssueCell.swift */; };
+		D744837B1FC5CEE400C1A048 /* IssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D744837A1FC5CEE400C1A048 /* IssueCell.xib */; };
+		D744837D1FC5CF0100C1A048 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D744837C1FC5CF0100C1A048 /* Date+Extension.swift */; };
+		D74483801FC5D1C500C1A048 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D744837E1FC5D1C500C1A048 /* LoadMoreCell.swift */; };
+		D74483811FC5D1C500C1A048 /* LoadMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D744837F1FC5D1C500C1A048 /* LoadMoreCell.xib */; };
+		D74483831FC5D6F400C1A048 /* GitHubRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483821FC5D6F400C1A048 /* GitHubRouter.swift */; };
+		D74483851FC5D70300C1A048 /* BitBicketRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483841FC5D70300C1A048 /* BitBicketRouter.swift */; };
 		D79CF3F71FC33B4D00022F58 /* GlobalStatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3F61FC33B4D00022F58 /* GlobalStatable.swift */; };
 		D79CF3FA1FC46A5800022F58 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3F91FC46A5800022F58 /* API.swift */; };
 		D79CF3FC1FC46AF900022F58 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF3FB1FC46AF900022F58 /* GitHubAPI.swift */; };
@@ -35,6 +43,14 @@
 		D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposViewController.swift; sourceTree = "<group>"; };
 		D74483701FC5C7A200C1A048 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
 		D74483731FC5C98E00C1A048 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		D74483761FC5CD8000C1A048 /* CellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellProtocol.swift; sourceTree = "<group>"; };
+		D74483781FC5CE9200C1A048 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
+		D744837A1FC5CEE400C1A048 /* IssueCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IssueCell.xib; sourceTree = "<group>"; };
+		D744837C1FC5CF0100C1A048 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		D744837E1FC5D1C500C1A048 /* LoadMoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
+		D744837F1FC5D1C500C1A048 /* LoadMoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadMoreCell.xib; sourceTree = "<group>"; };
+		D74483821FC5D6F400C1A048 /* GitHubRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubRouter.swift; sourceTree = "<group>"; };
+		D74483841FC5D70300C1A048 /* BitBicketRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitBicketRouter.swift; sourceTree = "<group>"; };
 		D79CF3F61FC33B4D00022F58 /* GlobalStatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStatable.swift; sourceTree = "<group>"; };
 		D79CF3F91FC46A5800022F58 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		D79CF3FB1FC46AF900022F58 /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
@@ -93,12 +109,26 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D74483751FC5CCDD00C1A048 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D74483761FC5CD8000C1A048 /* CellProtocol.swift */,
+				D74483781FC5CE9200C1A048 /* IssueCell.swift */,
+				D744837A1FC5CEE400C1A048 /* IssueCell.xib */,
+				D744837E1FC5D1C500C1A048 /* LoadMoreCell.swift */,
+				D744837F1FC5D1C500C1A048 /* LoadMoreCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		D79CF3F81FC46A4C00022F58 /* API */ = {
 			isa = PBXGroup;
 			children = (
 				D79CF3F91FC46A5800022F58 /* API.swift */,
 				D79CF3FB1FC46AF900022F58 /* GitHubAPI.swift */,
 				D79CF4001FC46E5D00022F58 /* BitBucketAPI.swift */,
+				D74483821FC5D6F400C1A048 /* GitHubRouter.swift */,
+				D74483841FC5D70300C1A048 /* BitBicketRouter.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -106,6 +136,7 @@
 		D79CF4021FC475D600022F58 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D74483751FC5CCDD00C1A048 /* Cell */,
 				D79CF4031FC475EC00022F58 /* LoginViewController.swift */,
 				D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */,
 				D79CF4071FC4914C00022F58 /* RepoViewController.swift */,
@@ -165,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				D7F92C461FC1733A00BAC2E1 /* Optional+Extension.swift */,
+				D744837C1FC5CF0100C1A048 /* Date+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -241,6 +273,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7F92C3B1FC15F0100BAC2E1 /* LaunchScreen.storyboard in Resources */,
+				D74483811FC5D1C500C1A048 /* LoadMoreCell.xib in Resources */,
+				D744837B1FC5CEE400C1A048 /* IssueCell.xib in Resources */,
 				D7F92C381FC15F0100BAC2E1 /* Assets.xcassets in Resources */,
 				D7F92C361FC15F0100BAC2E1 /* Main.storyboard in Resources */,
 			);
@@ -264,6 +298,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxKeyboard/RxKeyboard.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -275,6 +310,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxKeyboard.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -325,10 +361,15 @@
 				D79CF4041FC475EC00022F58 /* LoginViewController.swift in Sources */,
 				D7F92C4C1FC2B63100BAC2E1 /* Test2ViewController.swift in Sources */,
 				D7F92C4A1FC2B62600BAC2E1 /* Test1ViewController.swift in Sources */,
+				D74483771FC5CD8000C1A048 /* CellProtocol.swift in Sources */,
+				D74483831FC5D6F400C1A048 /* GitHubRouter.swift in Sources */,
+				D74483791FC5CE9200C1A048 /* IssueCell.swift in Sources */,
 				D79CF3FF1FC46DF000022F58 /* App.swift in Sources */,
 				D79CF4011FC46E5D00022F58 /* BitBucketAPI.swift in Sources */,
+				D74483801FC5D1C500C1A048 /* LoadMoreCell.swift in Sources */,
 				D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */,
 				D74483741FC5C98E00C1A048 /* Model.swift in Sources */,
+				D74483851FC5D70300C1A048 /* BitBicketRouter.swift in Sources */,
 				D7F92C471FC1733A00BAC2E1 /* Optional+Extension.swift in Sources */,
 				D79CF3F71FC33B4D00022F58 /* GlobalStatable.swift in Sources */,
 				D7F92C311FC15F0100BAC2E1 /* AppDelegate.swift in Sources */,
@@ -336,6 +377,7 @@
 				D744836E1FC5AE6C00C1A048 /* ReposViewController.swift in Sources */,
 				D79CF4061FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift in Sources */,
 				D79CF3FC1FC46AF900022F58 /* GitHubAPI.swift in Sources */,
+				D744837D1FC5CF0100C1A048 /* Date+Extension.swift in Sources */,
 				D7F92C441FC16AE400BAC2E1 /* GlobalState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

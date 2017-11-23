@@ -14,6 +14,7 @@ PODS:
     - RxCocoa (>= 4.0.0)
     - RxSwift (>= 4.0.0)
   - RxSwift (4.0.0)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -23,6 +24,7 @@ DEPENDENCIES:
   - RxDataSources
   - RxKeyboard
   - RxSwift
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
@@ -33,7 +35,8 @@ SPEC CHECKSUMS:
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
   RxKeyboard: eae01da0d1750e1c4852d20798279cf7b318c304
   RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: c6a59d7ece18976526ebe90ec8b19178c03e2ce0
+PODFILE CHECKSUM: 3c8bf119a1c947593cbe3a33a26057755220f594
 
 COCOAPODS: 1.3.1

@@ -13,6 +13,7 @@ target 'IssuesApp.rx' do
   pod 'RxCocoa'
   pod 'RxDataSources'
   pod 'RxKeyboard'
+  pod 'SwiftyJSON'
 
 
 end

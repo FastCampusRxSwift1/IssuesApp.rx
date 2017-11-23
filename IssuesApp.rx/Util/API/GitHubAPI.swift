@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import OAuthSwift
+import Alamofire
 
 struct GitHubAPI: API {
     
@@ -20,6 +21,13 @@ struct GitHubAPI: API {
         responseType:   "code"
     )
     
+    var decoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        decoder.dateDecodingStrategy = .formatted(formatter)
+        return decoder
+    }
     
     func getToken() -> Observable<Void> {
         return Observable<Void>.create { (observer) -> Disposable in
@@ -61,4 +69,16 @@ struct GitHubAPI: API {
             return Disposables.create()
         }
     }
+    
+    func repoIssues(owner: String, repo: String) -> (Int) -> Observable<[Model.Issue]> {
+        return { page in
+            let parameters: Parameters = ["page": page, "state": "all"]
+            return GitHubRouter.repoIssues(owner: owner, repo: repo).buildRequest(parameters: parameters).map { data in
+                guard let issues = try? self.decoder.decode([Model.Issue].self, from: data) else { return [] }
+                print(String(data: data, encoding: .utf8))
+                return issues
+                }.subscribeOn(MainScheduler.instance)
+        }
+    }
+    
 }
