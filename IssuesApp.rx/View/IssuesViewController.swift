@@ -22,6 +22,8 @@ class IssuesViewController: UIViewController {
     let datasource: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
     let refreshControl = UIRefreshControl()
     
+    var canLoadMore: Bool = true
+    var loadMoreCell: LoadMoreCell?
     var disposeBag: DisposeBag = DisposeBag()
     var isLoading: Bool = false
     var apiCall: PublishSubject<Int> = PublishSubject()
@@ -55,9 +57,13 @@ extension IssuesViewController {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
         datasource.asObservable()
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] issues in
                 guard let `self` = self else { return }
                 self.refreshControl.endRefreshing()
+                if issues.isEmpty {
+                    self.canLoadMore = false
+                    self.loadMoreCell?.loadDone()
+                }
             }).bind(to: collectionView.rx.items(dataSource: createDatasource()))
             .disposed(by: disposeBag)
         
@@ -77,6 +83,11 @@ extension IssuesViewController {
         refreshControl.rx.controlEvent(.valueChanged)
             .subscribe(onNext: { [weak self] () in
                 self?.refresh()
+            }).disposed(by: disposeBag)
+        
+        collectionView.rx.willDisplayCell.asObservable()
+            .subscribe(onNext: { [weak self] (_, indexPath: IndexPath) in
+                self?.loadMore(indexPath: indexPath)
             }).disposed(by: disposeBag)
         
         loadData()
@@ -101,12 +112,35 @@ extension IssuesViewController {
             cell.update(data: item)
             return cell
         })
+        datasource.configureSupplementaryView = { [weak self] datasource, collectionView, kind, indexPath -> UICollectionReusableView in
+            guard let `self` = self else { return UICollectionReusableView() }
+            switch kind {
+            case UICollectionElementKindSectionHeader:
+                assertionFailure()
+                return UICollectionReusableView()
+            case UICollectionElementKindSectionFooter:
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LoadMoreCell", for: indexPath) as? LoadMoreCell ?? LoadMoreCell()
+                self.loadMoreCell = footerView
+                return footerView
+            default:
+                assertionFailure()
+                return UICollectionReusableView()
+            }
+        }
         return datasource
     }
     
     func refresh() {
         disposeBag = DisposeBag()
+        canLoadMore = true
+        loadMoreCell?.load()
         bind()
+    }
+    
+    func loadMore(indexPath: IndexPath) {
+        guard let value = try? datasource.value() else { return }
+        guard  indexPath.item == value[0].items.count - 1 && !isLoading && canLoadMore else { return }
+        loadData()
     }
 }
 
