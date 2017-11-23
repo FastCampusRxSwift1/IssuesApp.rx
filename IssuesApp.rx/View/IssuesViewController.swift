@@ -19,7 +19,8 @@ class IssuesViewController: UIViewController {
     @IBOutlet var collectionView: UICollectionView!
     
     let estimateCell: IssueCell = IssueCell.cellFromNib
-    let datasource: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
+    let datasourceIn: BehaviorSubject<[Model.Issue]> = BehaviorSubject(value: [])
+    let datasourceOut: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
     let refreshControl = UIRefreshControl()
     
     var canLoadMore: Bool = true
@@ -27,6 +28,7 @@ class IssuesViewController: UIViewController {
     var disposeBag: DisposeBag = DisposeBag()
     var isLoading: Bool = false
     var apiCall: PublishSubject<Int> = PublishSubject()
+    var page: Int = 1
     
     lazy var api: (Int) -> Observable<[Model.Issue]> = { () -> (Int) -> Observable<[Model.Issue]> in
         let owner = GlobalState.instance.owner
@@ -56,9 +58,17 @@ extension IssuesViewController {
     func bind() {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        datasource.asObservable()
+         datasourceIn.asObservable().skip(1)
+            .scan([], accumulator: { (old: [Model.Issue], new: [Model.Issue]) -> [Model.Issue] in
+                return old + new
+            }).map { (issues) -> [IssueSectionModel] in
+                return [IssueSectionModel(model: 0, items: issues)]
+            }.bind(to: datasourceOut).disposed(by: disposeBag)
+        
+        datasourceOut.asObservable()
             .do(onNext: { [weak self] issues in
                 guard let `self` = self else { return }
+                self.page += 1
                 self.refreshControl.endRefreshing()
                 if issues.isEmpty {
                     self.canLoadMore = false
@@ -75,9 +85,7 @@ extension IssuesViewController {
                     self?.isLoading = false
             }).catchError({ (error) -> Observable<[Model.Issue]> in
                 return Observable.just([])
-            }).map { (issues) -> [IssueSectionModel] in
-                return [IssueSectionModel(model: 0, items: issues)]
-            }.bind(to: datasource)
+            }).bind(to: datasourceIn)
             .disposed(by: disposeBag)
         
         refreshControl.rx.controlEvent(.valueChanged)
@@ -100,7 +108,7 @@ extension IssuesViewController {
     func loadData() {
         guard isLoading == false else { return }
         isLoading = true
-        apiCall.onNext(1)
+        apiCall.onNext(page)
     }
     
     func createDatasource() -> DataSourceType {
@@ -131,6 +139,7 @@ extension IssuesViewController {
     }
     
     func refresh() {
+        page = 1
         disposeBag = DisposeBag()
         canLoadMore = true
         loadMoreCell?.load()
@@ -138,7 +147,7 @@ extension IssuesViewController {
     }
     
     func loadMore(indexPath: IndexPath) {
-        guard let value = try? datasource.value() else { return }
+        guard let value = try? datasourceOut.value() else { return }
         guard  indexPath.item == value[0].items.count - 1 && !isLoading && canLoadMore else { return }
         loadData()
     }
@@ -146,7 +155,7 @@ extension IssuesViewController {
 
 extension IssuesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let value = try? datasource.value() else { return CGSize.zero }
+        guard let value = try? datasourceOut.value() else { return CGSize.zero }
         let items: [Model.Issue] = value[0].items
         let data = items[indexPath.item]
         estimateCell.update(data: data)
