@@ -11,19 +11,14 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class IssuesViewController: UIViewController, SeguewayConstantable {
-    
-    enum Constants: String {
-        case pushToDetail
-        case presentToCreateIssueSegue
-    }
+class IssuesViewController: UIViewController {
+
     typealias IssueSectionModel = SectionModel<Int, Model.Issue>
     typealias DataSourceType = RxCollectionViewSectionedReloadDataSource<IssueSectionModel>
     
     @IBOutlet var collectionView: UICollectionView!
     
     let estimateCell: IssueCell = IssueCell.cellFromNib
-    let datasourceIn: BehaviorSubject<[Model.Issue]> = BehaviorSubject(value: [])
     let datasource: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
     
     var disposeBag: DisposeBag = DisposeBag()
@@ -61,12 +56,6 @@ extension IssuesViewController {
             .bind(to: collectionView.rx.items(dataSource: createDatasource()))
             .disposed(by: disposeBag)
         
-        collectionView.rx.itemSelected.asObservable().subscribe(onNext: { [weak self] indexPath in
-            guard let `self` = self else { return }
-            guard let issue = try? self.datasource.value().first?.items[indexPath.item] else { return }
-            self.performSegue(withIdentifier: Constants.pushToDetail.rawValue, sender: issue)
-        }).disposed(by: disposeBag)
-        
         apiCall.flatMap {[unowned self ] page -> Observable<[Model.Issue]> in
             return self.api(page)
             }.do(onNext: { [weak self] (_) in
@@ -93,8 +82,8 @@ extension IssuesViewController {
         apiCall.onNext(1)
     }
     
-    func createDatasource() -> RxCollectionViewSectionedReloadDataSource<IssueSectionModel> {
-        let datasource = RxCollectionViewSectionedReloadDataSource<IssueSectionModel>(configureCell: { (datasource, collectionView, indexPath, item) -> UICollectionViewCell in
+    func createDatasource() -> DataSourceType {
+        let datasource = DataSourceType(configureCell: { (datasource, collectionView, indexPath, item) -> UICollectionViewCell in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IssueCell", for: indexPath) as? IssueCell else {
                 assertionFailure()
                 return IssueCell()
