@@ -20,6 +20,7 @@ class IssuesViewController: UIViewController {
     
     let estimateCell: IssueCell = IssueCell.cellFromNib
     let datasource: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
+    let refreshControl = UIRefreshControl()
     
     var disposeBag: DisposeBag = DisposeBag()
     var isLoading: Bool = false
@@ -40,6 +41,7 @@ class IssuesViewController: UIViewController {
     
     func setup() {
         collectionView.register(UINib(nibName: "IssueCell", bundle: nil), forCellWithReuseIdentifier: "IssueCell")
+        collectionView.refreshControl = refreshControl
         collectionView.alwaysBounceVertical = true
         let owner = GlobalState.instance.owner
         let repo = GlobalState.instance.repo
@@ -53,7 +55,10 @@ extension IssuesViewController {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
         datasource.asObservable()
-            .bind(to: collectionView.rx.items(dataSource: createDatasource()))
+            .do(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.refreshControl.endRefreshing()
+            }).bind(to: collectionView.rx.items(dataSource: createDatasource()))
             .disposed(by: disposeBag)
         
         apiCall.flatMap {[unowned self ] page -> Observable<[Model.Issue]> in
@@ -68,6 +73,11 @@ extension IssuesViewController {
                 return [IssueSectionModel(model: 0, items: issues)]
             }.bind(to: datasource)
             .disposed(by: disposeBag)
+        
+        refreshControl.rx.controlEvent(.valueChanged)
+            .subscribe(onNext: { [weak self] () in
+                self?.refresh()
+            }).disposed(by: disposeBag)
         
         loadData()
         
@@ -92,6 +102,11 @@ extension IssuesViewController {
             return cell
         })
         return datasource
+    }
+    
+    func refresh() {
+        disposeBag = DisposeBag()
+        bind()
     }
 }
 
