@@ -62,34 +62,6 @@ extension GitHubRouter {
     }
     
     func buildRequest(parameters: Parameters) -> Observable<Data> {
-        return Observable.create { (anyObserver) -> Disposable in
-            let request = GitHubRouter.manager.request(self.url, method: self.method, parameters: parameters, encoding: self.parameterEncoding, headers: GitHubRouter.defaultHeaders)
-                .responseData(completionHandler: { (dataResponse: DataResponse<Data>) in
-                    guard let response = dataResponse.response else {
-                        anyObserver.onError(NSError(domain: "error", code: 1000, userInfo: nil))
-                        return
-                    }
-                    print("status code: \(response.statusCode)")
-                    
-                    switch dataResponse.result {
-                    case .success(let data) where response.statusCode >= 200 && response.statusCode < 300 :
-                        //                        print("data: \(String(data: data, encoding: .utf8))")
-                        anyObserver.onNext(data)
-                        anyObserver.onCompleted()
-                    case .failure(let error):
-                        print("error: \(error)")
-                        anyObserver.onError(error)
-                        
-                    default:
-                        let error = NSError(domain: "error", code: response.statusCode, userInfo: [:])
-                        print("error: \(error)")
-                        anyObserver.onError(error)
-                        
-                    }
-                })
-            return Disposables.create {
-                request.cancel()
-            }
-        }
+        return Observable.empty()
     }
 }
