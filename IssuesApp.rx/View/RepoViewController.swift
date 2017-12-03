@@ -31,10 +31,9 @@ class RepoViewController: UIViewController, SeguewayConstantable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ownerTextField.text = GlobalState.instance.owner
-        repoTextField.text = GlobalState.instance.repo
+        GlobalState.instance.rx.owner.bind(to: ownerTextField.rx.text).disposed(by: disposeBag)
+        GlobalState.instance.rx.repo.bind(to: repoTextField.rx.text).disposed(by: disposeBag)
         bind()
-        // Do any additional setup after loading the view.
     }
     
     // MARK: - Navigation
