@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A7692C440EE031AB6C754F38 /* Pods_IssuesApp_rx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDD3A93DE0578F0843E9ED64 /* Pods_IssuesApp_rx.framework */; };
+		D7089CE91FD44F27004AB625 /* IssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7089CE81FD44F27004AB625 /* IssuesLoader.swift */; };
 		D744836E1FC5AE6C00C1A048 /* ReposViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */; };
 		D74483711FC5C7A200C1A048 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483701FC5C7A200C1A048 /* IssuesViewController.swift */; };
 		D74483741FC5C98E00C1A048 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74483731FC5C98E00C1A048 /* Model.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		640DE4201C873328777EC7AD /* Pods-IssuesApp.rx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IssuesApp.rx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-IssuesApp.rx/Pods-IssuesApp.rx.debug.xcconfig"; sourceTree = "<group>"; };
 		CDD3A93DE0578F0843E9ED64 /* Pods_IssuesApp_rx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IssuesApp_rx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7089CE81FD44F27004AB625 /* IssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLoader.swift; sourceTree = "<group>"; };
 		D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposViewController.swift; sourceTree = "<group>"; };
 		D74483701FC5C7A200C1A048 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
 		D74483731FC5C98E00C1A048 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				D79CF4071FC4914C00022F58 /* RepoViewController.swift */,
 				D744836D1FC5AE6C00C1A048 /* ReposViewController.swift */,
 				D74483701FC5C7A200C1A048 /* IssuesViewController.swift */,
+				D7089CE81FD44F27004AB625 /* IssuesLoader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				D79CF3FF1FC46DF000022F58 /* App.swift in Sources */,
 				D79CF4011FC46E5D00022F58 /* BitBucketAPI.swift in Sources */,
 				D74483801FC5D1C500C1A048 /* LoadMoreCell.swift in Sources */,
+				D7089CE91FD44F27004AB625 /* IssuesLoader.swift in Sources */,
 				D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */,
 				D74483741FC5C98E00C1A048 /* Model.swift in Sources */,
 				D74483851FC5D70300C1A048 /* BitBicketRouter.swift in Sources */,
