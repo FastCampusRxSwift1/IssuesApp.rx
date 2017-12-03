@@ -10,11 +10,7 @@ import Foundation
 import SwiftyJSON
 
 struct Model {
-    
-}
-
-extension Model {
-    struct Issue: Codable {
+    struct Issue: Codable, ListableModel {
         let id: Int
         let number: Int
         let title: String
@@ -39,6 +35,14 @@ extension Model {
             case closedAt = "closed_at"
         }
     }
+}
+
+protocol ListableModel {
+    
+}
+
+extension Model {
+    
 }
 
 extension Model.Issue {
@@ -90,7 +94,7 @@ extension Model {
 }
 
 extension Model {
-    public struct Comment: Codable {
+    public struct Comment: Codable, ListableModel {
         let id: Int
         let user: Model.User
         let body: String

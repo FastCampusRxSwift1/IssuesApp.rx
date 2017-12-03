@@ -12,7 +12,6 @@ import RxCocoa
 import RxDataSources
 
 class IssuesViewController: UIViewController {
-
     typealias IssueSectionModel = SectionModel<Int, Model.Issue>
     typealias DataSourceType = RxCollectionViewSectionedReloadDataSource<IssueSectionModel>
     
