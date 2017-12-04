@@ -11,9 +11,14 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class IssuesViewController: UIViewController {
+class IssuesViewController: UIViewController, SeguewayConstantable {
     typealias IssueSectionModel = SectionModel<Int, Model.Issue>
     typealias DataSourceType = RxCollectionViewSectionedReloadDataSource<IssueSectionModel>
+    
+    enum Constants: String {
+        case pushToDetail
+        case presentToCreateIssueSegue
+    }
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -41,6 +46,22 @@ class IssuesViewController: UIViewController {
         self.title = "\(owner)/\(repo)"
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let segueIdentifier: Constants = Constants(rawValue: segue.identifier ?? "") ?? .pushToDetail
+        switch segueIdentifier {
+        case .pushToDetail:
+            guard let issue = sender as? Model.Issue else { return }
+            guard let viewController = segue.destination as? IssueDetailViewController else { return }
+            viewController.issue = issue
+            break
+        case .presentToCreateIssueSegue:
+//            guard let navigationController = segue.destination as? UINavigationController, let viewController = navigationController.topViewController as? CreateIssueViewController else { return }
+//            viewController.reloadSubject = reloadSubject
+            break
+        }
+    }
+    
 }
 
 extension IssuesViewController {
@@ -52,6 +73,12 @@ extension IssuesViewController {
             .disposed(by: disposeBag)
         loader.register(refreshControl: refreshControl)
         loader.registerLoadMore(collectionView: collectionView)
+        
+        collectionView.rx.itemSelected.asObservable().subscribe(onNext: { [weak self] indexPath in
+            guard let `self` = self else { return }
+            guard let issue = self.loader.item(at: indexPath) else { return }
+            self.performSegue(withIdentifier: Constants.pushToDetail.rawValue, sender: issue)
+        }).disposed(by: disposeBag)
     }
 }
 

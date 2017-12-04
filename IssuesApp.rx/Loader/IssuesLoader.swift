@@ -22,23 +22,3 @@ class IssuesLoader: Loader<Model.Issue> {
     }
 }
 
-extension IssuesLoader {
-    func registerLoadMore(collectionView: UICollectionView) {
-        collectionView.rx.willDisplayCell.asObservable()
-            .subscribe(onNext: { [weak self] (_, indexPath: IndexPath) in
-                self?.loadMore(indexPath: indexPath)
-            }).disposed(by: disposeBag)
-    }
-    
-    func register(refreshControl: UIRefreshControl) {
-        refreshControl.rx.controlEvent(.valueChanged)
-            .subscribe(onNext: { [weak self] () in
-                self?.refresh()
-            }).disposed(by: disposeBag)
-        self.refreshControl = refreshControl
-    }
-    
-    func register(loadMoreCell: LoadMoreCell) {
-        self.loadMoreCell = loadMoreCell
-    }
-}

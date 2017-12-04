@@ -34,7 +34,15 @@ class Loader <ModelType: ListableModel> {
     
     func bind() {
         datasourceIn.asObservable().skip(1)
-            .scan([], accumulator: { [weak self] (old: [ModelType], new: [ModelType]) -> [ModelType] in
+            .do(onNext: { [weak self] (issues) in
+                guard let `self` = self else { return }
+                self.nextPageID += 1
+                self.refreshControl?.endRefreshing()
+                if issues.isEmpty {
+                    self.canLoadMore = false
+                    self.loadMoreCell?.loadDone()
+                }
+            }).scan([], accumulator: { [weak self] (old: [ModelType], new: [ModelType]) -> [ModelType] in
                 if self?.nextPageID == 1 {
                     return new
                 }
@@ -43,16 +51,6 @@ class Loader <ModelType: ListableModel> {
                 return [SectionModelType(model: 0, items: issues)]
             }.bind(to: datasourceOut).disposed(by: disposeBag)
         
-        datasourceOut.asObservable().skip(1)
-            .subscribe(onNext: { [weak self] (issues) in
-                guard let `self` = self else { return }
-                self.nextPageID += 1
-                self.refreshControl?.endRefreshing()
-                if issues.isEmpty {
-                    self.canLoadMore = false
-                    self.loadMoreCell?.loadDone()
-                }
-            }).disposed(by: disposeBag)
         apiCall.flatMap {[unowned self ] page -> Observable<[ModelType]> in
             return self.api(self.nextPageID)
             }.do(onNext: { [weak self] (_) in
@@ -90,5 +88,24 @@ class Loader <ModelType: ListableModel> {
         let items: [ModelType] = value[0].items
         let data = items[indexPath.item]
         return data
+    }
+    
+    func registerLoadMore(collectionView: UICollectionView) {
+        collectionView.rx.willDisplayCell.asObservable()
+            .subscribe(onNext: { [weak self] (_, indexPath: IndexPath) in
+                self?.loadMore(indexPath: indexPath)
+            }).disposed(by: disposeBag)
+    }
+    
+    func register(refreshControl: UIRefreshControl) {
+        refreshControl.rx.controlEvent(.valueChanged)
+            .subscribe(onNext: { [weak self] () in
+                self?.refresh()
+            }).disposed(by: disposeBag)
+        self.refreshControl = refreshControl
+    }
+    
+    func register(loadMoreCell: LoadMoreCell) {
+        self.loadMoreCell = loadMoreCell
     }
 }

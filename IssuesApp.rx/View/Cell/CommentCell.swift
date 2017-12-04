@@ -44,12 +44,6 @@ extension CommentCell {
         bodyLabel.text = comment.body
     }
 
-    static var cellFromNib: CommentCell {
-        guard let cell = Bundle.main.loadNibNamed("CommentCell", owner: nil, options: nil)?.first as? CommentCell else {
-            return CommentCell()
-        }
-        return cell
-    }
     
     static func cellSize(collectionView: UICollectionView, item: Model.Comment, indexPath: IndexPath) -> CGSize {
         var estimatedSize = estimatedSizes[indexPath] ?? CGSize.zero

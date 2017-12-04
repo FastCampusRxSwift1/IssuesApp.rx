@@ -282,17 +282,17 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="Kui-Uf-EXy" id="7Hv-TF-aDj"/>
-                        <segue destination="cI5-1d-ljB" kind="show" id="QaX-no-gIl"/>
+                        <segue destination="cI5-1d-ljB" kind="show" identifier="pushToDetail" id="QaX-no-gIl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GAh-Pa-08Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2672.8000000000002" y="-161.46926536731635"/>
         </scene>
-        <!--View Controller-->
+        <!--Issue Detail View Controller-->
         <scene sceneID="KCE-Dq-G8Y">
             <objects>
-                <viewController id="cI5-1d-ljB" sceneMemberID="viewController">
+                <viewController id="cI5-1d-ljB" customClass="IssueDetailViewController" customModule="IssuesApp_rx" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HGW-Nf-ZXS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -303,10 +303,14 @@
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zxu-Ci-IaY">
                                     <size key="itemSize" width="375" height="107"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="50" height="50"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="I4E-Fe-nNq" customClass="LoadMoreCell" customModule="IssuesApp_rx" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionReusableView>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -318,6 +322,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Pes-OK-ZLw"/>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="Ofj-pr-oGk" id="7Ol-L5-VgM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k80-bx-0ks" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
