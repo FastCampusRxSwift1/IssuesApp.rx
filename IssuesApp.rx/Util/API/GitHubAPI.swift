@@ -75,7 +75,6 @@ struct GitHubAPI: API {
             let parameters: Parameters = ["page": page, "state": "all"]
             return GitHubRouter.repoIssues(owner: owner, repo: repo).buildRequest(parameters: parameters).map { data in
                 guard let issues = try? self.decoder.decode([Model.Issue].self, from: data) else { return [] }
-                print(String(data: data, encoding: .utf8))
                 return issues
                 }.subscribeOn(MainScheduler.instance)
         }

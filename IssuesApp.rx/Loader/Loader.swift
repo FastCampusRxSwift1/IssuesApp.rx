@@ -1,5 +1,5 @@
 //
-//  IssuesLoader.swift
+//  Loader.swift
 //  IssuesApp.rx
 //
 //  Created by leonard on 2017. 12. 4..
@@ -17,8 +17,8 @@ class Loader <ModelType: ListableModel> {
     fileprivate var nextPageID: Int = 1
     fileprivate var canLoadMore: Bool = true
     fileprivate var isLoading: Bool = false
-    fileprivate var refreshControl: UIRefreshControl?
-    fileprivate var loadMoreCell: LoadMoreCell?
+    var refreshControl: UIRefreshControl?
+    var loadMoreCell: LoadMoreCell?
     fileprivate var apiCall: PublishSubject<Int> = PublishSubject()
     fileprivate let datasourceIn: BehaviorSubject<[ModelType]> = BehaviorSubject(value: [])
     fileprivate let datasourceOut: BehaviorSubject<[SectionModelType]> = BehaviorSubject(value: [SectionModelType(model: 0, items: [])])
@@ -90,37 +90,5 @@ class Loader <ModelType: ListableModel> {
         let items: [ModelType] = value[0].items
         let data = items[indexPath.item]
         return data
-    }
-}
-
-class IssuesLoader: Loader<Model.Issue> {
-    override init() {
-        super.init()
-        api = { () -> (Int) -> Observable<[Model.Issue]> in
-            let owner = GlobalState.instance.owner
-            let repo = GlobalState.instance.repo
-            return App.api.repoIssues(owner: owner, repo: repo)
-        }()
-    }
-}
-
-extension IssuesLoader {
-    func registerLoadMore(collectionView: UICollectionView) {
-        collectionView.rx.willDisplayCell.asObservable()
-            .subscribe(onNext: { [weak self] (_, indexPath: IndexPath) in
-                self?.loadMore(indexPath: indexPath)
-            }).disposed(by: disposeBag)
-    }
-    
-    func register(refreshControl: UIRefreshControl) {
-        refreshControl.rx.controlEvent(.valueChanged)
-            .subscribe(onNext: { [weak self] () in
-                self?.refresh()
-            }).disposed(by: disposeBag)
-        self.refreshControl = refreshControl
-    }
-    
-    func register(loadMoreCell: LoadMoreCell) {
-        self.loadMoreCell = loadMoreCell
     }
 }

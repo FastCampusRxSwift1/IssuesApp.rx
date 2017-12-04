@@ -23,7 +23,7 @@ class Test2ViewController: UIViewController {
         
         textField.rx.text.bind(onNext: { (value: String?) in
                 
-                print("textField.rx.text.bind on Next: \(value)")
+            print("textField.rx.text.bind on Next: \(String(describing: value))")
             
 //                GlobalState.instance.rx.owner.accept(value)
 //            GlobalState.instance.rx.ownerObserver.onNext(value)
