@@ -23,6 +23,8 @@ class IssueDetailViewController: UIViewController {
     var issue: Model.Issue!
     var loadMoreCell: LoadMoreCell?
     var disposeBag: DisposeBag = DisposeBag()
+    var header: IssueDetailHeaderCell?
+    var headerSize: CGSize = CGSize.zero
     lazy var loader: IssuesDetailLoader =  { [unowned self] in
         return IssuesDetailLoader(number: self.issue.number)
     }()
@@ -69,8 +71,13 @@ extension IssueDetailViewController {
             guard let `self` = self else { return UICollectionReusableView() }
             switch kind {
             case UICollectionElementKindSectionHeader:
-                assertionFailure()
-                return UICollectionReusableView()
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "IssueDetailHeaderCell", for: indexPath) as? IssueDetailHeaderCell else {
+                    assertionFailure()
+                    return UICollectionViewCell()
+                }
+                header.update(data: self.issue)
+                self.header = header
+                return header
             case UICollectionElementKindSectionFooter:
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LoadMoreCell", for: indexPath) as? LoadMoreCell ?? LoadMoreCell()
                 self.loader.register(loadMoreCell: footerView)
@@ -91,17 +98,10 @@ extension IssueDetailViewController: UICollectionViewDelegateFlowLayout {
         let estimatedSize = CommentCell.cellSize(collectionView: collectionView, item: data, indexPath: indexPath)
         return estimatedSize
     }
-}
-
-class IssuesDetailLoader: Loader<Model.Comment> {
-    var number: Int
-    init(number number_: Int) {
-        number  = number_
-        super.init()
-        api = { () -> (Int) -> Observable<[Model.Comment]> in
-            let owner = GlobalState.instance.owner
-            let repo = GlobalState.instance.repo
-            return App.api.issueComment(owner: owner, repo: repo, number: number)
-        }()
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if headerSize == CGSize.zero {
+            headerSize = IssueDetailHeaderCell.headerSize(issue: issue, width: collectionView.frame.width)    
+        }
+        return headerSize
     }
 }
