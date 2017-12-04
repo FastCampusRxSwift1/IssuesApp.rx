@@ -11,8 +11,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-
-
 class IssuesLoader: Loader<Model.Issue> {
     override init() {
         super.init()

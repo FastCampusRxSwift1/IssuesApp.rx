@@ -12,6 +12,7 @@ import Alamofire
 
 enum GitHubRouter {
     case repoIssues(owner: String, repo: String)
+    case issueComment(owner: String, repo: String, number: Int)
 }
 
 extension GitHubRouter {
@@ -39,6 +40,8 @@ extension GitHubRouter {
         switch self {
         case let .repoIssues(owner, repo):
             return "/repos/\(owner)/\(repo)/issues"
+        case let .issueComment(owner, repo, number):
+            return "/repos/\(owner)/\(repo)/issues/\(number)/comments"
         }
     }
     
@@ -49,14 +52,16 @@ extension GitHubRouter {
     
     var method: HTTPMethod {
         switch self {
-        case .repoIssues:
+        case .repoIssues,
+             .issueComment:
             return .get
         }
     }
     
     var parameterEncoding: ParameterEncoding {
         switch self {
-        case .repoIssues:
+        case .repoIssues,
+             .issueComment:
             return URLEncoding.default
         }
     }

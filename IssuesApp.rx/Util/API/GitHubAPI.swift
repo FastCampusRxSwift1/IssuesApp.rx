@@ -80,4 +80,14 @@ struct GitHubAPI: API {
         }
     }
     
+    func issueComment(owner: String, repo: String, number: Int) -> (Int) -> Observable<[Model.Comment]> {
+        return { page in
+            let parameters = ["page": page]
+            return GitHubRouter.issueComment(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters).map { data in
+                guard let comments = try? self.decoder.decode([Model.Comment].self, from: data) else { return [] }
+                return comments
+                }.subscribeOn(MainScheduler.instance)
+        }
+    }
+    
 }
