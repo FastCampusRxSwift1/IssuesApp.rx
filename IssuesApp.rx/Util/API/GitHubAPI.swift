@@ -90,4 +90,17 @@ struct GitHubAPI: API {
         }
     }
     
+    func toggleIssueState(owner: String, repo: String, number: Int, issue: Model.Issue) -> Observable<Model.Issue> {
+        let nextState: Model.Issue.State = issue.state == Model.Issue.State.open ? .closed : .open
+        let updatedIssue = issue.update(state: nextState)
+        let parameters = (try? updatedIssue.asDictionary()) ?? Parameters()
+        print("parameters: \(parameters)")
+        return GitHubRouter.editIssue(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters).flatMap { data -> Observable<Model.Issue> in
+            guard let issue = try? self.decoder.decode(Model.Issue.self, from: data) else {
+                return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+            }
+            return Observable.just(issue)
+            }.subscribeOn(MainScheduler.instance)
+    }
+    
 }

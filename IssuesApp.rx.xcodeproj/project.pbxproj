@@ -32,6 +32,7 @@
 		D79CF4041FC475EC00022F58 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4031FC475EC00022F58 /* LoginViewController.swift */; };
 		D79CF4061FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */; };
 		D79CF4081FC4914C00022F58 /* RepoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CF4071FC4914C00022F58 /* RepoViewController.swift */; };
+		D7B2BDA11FD708A5000B0422 /* Encodable+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B2BDA01FD708A4000B0422 /* Encodable+extension.swift */; };
 		D7DA37971FD59E76007E1E6E /* IssueDetailHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7DA37951FD59E75007E1E6E /* IssueDetailHeaderCell.xib */; };
 		D7DA37981FD59E76007E1E6E /* IssueDetailHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DA37961FD59E75007E1E6E /* IssueDetailHeaderCell.swift */; };
 		D7DA379A1FD5A1BE007E1E6E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DA37991FD5A1BE007E1E6E /* UIColor+Extension.swift */; };
@@ -73,6 +74,7 @@
 		D79CF4031FC475EC00022F58 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D79CF4051FC48DEF00022F58 /* ViewControlelrFromStoryBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControlelrFromStoryBoard.swift; sourceTree = "<group>"; };
 		D79CF4071FC4914C00022F58 /* RepoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoViewController.swift; sourceTree = "<group>"; };
+		D7B2BDA01FD708A4000B0422 /* Encodable+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Encodable+extension.swift"; sourceTree = "<group>"; };
 		D7DA37951FD59E75007E1E6E /* IssueDetailHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IssueDetailHeaderCell.xib; sourceTree = "<group>"; };
 		D7DA37961FD59E75007E1E6E /* IssueDetailHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IssueDetailHeaderCell.swift; sourceTree = "<group>"; };
 		D7DA37991FD5A1BE007E1E6E /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 		D7F92C451FC1732A00BAC2E1 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				D7B2BDA01FD708A4000B0422 /* Encodable+extension.swift */,
 				D7F92C461FC1733A00BAC2E1 /* Optional+Extension.swift */,
 				D744837C1FC5CF0100C1A048 /* Date+Extension.swift */,
 				D7DA37991FD5A1BE007E1E6E /* UIColor+Extension.swift */,
@@ -399,6 +402,7 @@
 				D7F92C4C1FC2B63100BAC2E1 /* Test2ViewController.swift in Sources */,
 				D7F92C4A1FC2B62600BAC2E1 /* Test1ViewController.swift in Sources */,
 				D74483771FC5CD8000C1A048 /* CellProtocol.swift in Sources */,
+				D7B2BDA11FD708A5000B0422 /* Encodable+extension.swift in Sources */,
 				D7089CF01FD571CC004AB625 /* CommentCell.swift in Sources */,
 				D74483831FC5D6F400C1A048 /* GitHubRouter.swift in Sources */,
 				D7DA379A1FD5A1BE007E1E6E /* UIColor+Extension.swift in Sources */,

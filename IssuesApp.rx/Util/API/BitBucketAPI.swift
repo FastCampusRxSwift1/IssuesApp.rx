@@ -66,4 +66,7 @@ struct BitbucketAPI: API {
     func issueComment(owner: String, repo: String, number: Int) -> (Int) -> Observable<[Model.Comment]> {
         return { page in return Observable.empty() }
     }
+    func toggleIssueState(owner: String, repo: String, number: Int, issue: Model.Issue) -> Observable<Model.Issue> {
+        return Observable.empty()
+    }
 }
