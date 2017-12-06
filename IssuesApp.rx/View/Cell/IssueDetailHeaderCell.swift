@@ -8,6 +8,8 @@
 
 import UIKit
 import AlamofireImage
+import RxSwift
+import RxCocoa
 
 @IBDesignable
 class IssueDetailHeaderCell: UICollectionReusableView {
@@ -109,4 +111,12 @@ extension IssueDetailHeaderCell {
         commentBodyLabel.text = data.body
     }
     
+}
+
+extension Reactive where Base: IssueDetailHeaderCell {
+    var issue: Binder<Model.Issue> {
+        return Binder(self.base) { header, issue in
+            header.update(data: issue)
+        }
+    }
 }
