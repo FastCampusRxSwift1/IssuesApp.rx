@@ -36,14 +36,14 @@ class Loader <ModelType: ListableModel> {
         datasourceIn.asObservable().skip(1)
             .do(onNext: { [weak self] (issues) in
                 guard let `self` = self else { return }
-                self.nextPageID += 1
                 self.refreshControl?.endRefreshing()
+                self.nextPageID += 1
                 if issues.isEmpty {
                     self.canLoadMore = false
                     self.loadMoreCell?.loadDone()
                 }
             }).scan([], accumulator: { [weak self] (old: [ModelType], new: [ModelType]) -> [ModelType] in
-                if self?.nextPageID == 1 {
+                if self?.nextPageID == 2 {
                     return new
                 }
                 return old + new
@@ -71,9 +71,9 @@ class Loader <ModelType: ListableModel> {
     }
     
     func refresh() {
-        nextPageID = 1
         canLoadMore = true
         loadMoreCell?.load()
+        nextPageID = 1
         loadData()
     }
     
@@ -98,7 +98,7 @@ class Loader <ModelType: ListableModel> {
     }
     
     func register(refreshControl: UIRefreshControl) {
-        refreshControl.rx.controlEvent(.valueChanged)
+        refreshControl.rx.controlEvent(.valueChanged).throttle(2.5, scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] () in
                 self?.refresh()
             }).disposed(by: disposeBag)
