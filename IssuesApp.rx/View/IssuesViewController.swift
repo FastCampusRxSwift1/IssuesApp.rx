@@ -28,7 +28,7 @@ class IssuesViewController: UIViewController, SeguewayConstantable {
     var loadMoreCell: LoadMoreCell?
     var disposeBag: DisposeBag = DisposeBag()
     var loader: IssuesLoader = IssuesLoader()
-    
+    var reloadIssueSubject: PublishSubject<Model.Issue> = PublishSubject()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +53,7 @@ class IssuesViewController: UIViewController, SeguewayConstantable {
         case .pushToDetail:
             guard let issue = sender as? Model.Issue else { return }
             guard let viewController = segue.destination as? IssueDetailViewController else { return }
+            viewController.parentViewReload = reloadIssueSubject
             viewController.issue = issue
             break
         case .presentToCreateIssueSegue:
@@ -79,6 +80,12 @@ extension IssuesViewController {
             guard let issue = self.loader.item(at: indexPath) else { return }
             self.performSegue(withIdentifier: Constants.pushToDetail.rawValue, sender: issue)
         }).disposed(by: disposeBag)
+        reloadIssueSubject
+            .subscribe(onNext: { [weak self] (issue) in
+                guard let `self` = self else { return }
+                guard let indexPath = self.loader.index(of: issue) else { return }
+                self.loader.replace(item: issue, indexPath: indexPath)
+            }).disposed(by: disposeBag)
     }
 }
 

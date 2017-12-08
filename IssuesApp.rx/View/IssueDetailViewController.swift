@@ -25,6 +25,7 @@ class IssueDetailViewController: UIViewController {
     var disposeBag: DisposeBag = DisposeBag()
     var header: BehaviorSubject<IssueDetailHeaderCell> = BehaviorSubject(value: IssueDetailHeaderCell())
     var headerSize: CGSize = CGSize.zero
+    var parentViewReload: PublishSubject<Model.Issue>?
     lazy var loader: IssuesDetailLoader =  { [unowned self] in
         return IssuesDetailLoader(issue: self.issue)
     }()
@@ -54,12 +55,17 @@ extension IssueDetailViewController {
             .disposed(by: disposeBag)
         loader.register(refreshControl: refreshControl)
         loader.registerLoadMore(collectionView: collectionView)
-        header.asObservable().skip(1).subscribe(onNext: { [weak self] header in
+        
+        header.asObservable().skip(1).share().subscribe(onNext: { [weak self] header in
             guard let `self` = self else { return }
             header.update(data: self.issue)
             self.loader.stateButtonTapSubject.onNext(header.stateButton.rx.tap.asObservable())
-            self.loader.issueChangedObservable.bind(to: header.rx.issue).disposed(by: self.disposeBag)
+            
         }).disposed(by: disposeBag)
+        
+        if let reload = parentViewReload {
+            loader.issueChangedObservable.bind(to: reload).disposed(by: disposeBag)
+        }
         
     }
 }
@@ -83,6 +89,7 @@ extension IssueDetailViewController {
                     return UICollectionViewCell()
                 }
                 self.header.onNext(header)
+                self.loader.issueChangedObservable.bind(to: header.rx.issue).disposed(by: self.disposeBag)
                 return header
             case UICollectionElementKindSectionFooter:
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LoadMoreCell", for: indexPath) as? LoadMoreCell ?? LoadMoreCell()

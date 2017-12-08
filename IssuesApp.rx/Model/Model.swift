@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 struct Model {
-    struct Issue: Codable, ListableModel {
+    struct Issue: Codable, ListableModel, Equatable {
         let id: Int
         let number: Int
         let title: String
@@ -33,6 +33,10 @@ struct Model {
             case createdAt = "created_at"
             case updatedAt = "updated_at"
             case closedAt = "closed_at"
+        }
+        
+        static func ==(lhs: Model.Issue, rhs: Model.Issue) -> Bool {
+            return lhs.id == rhs.id
         }
     }
 }
@@ -104,7 +108,7 @@ extension Model {
 }
 
 extension Model {
-    public struct Comment: Codable, ListableModel {
+    public struct Comment: Codable, ListableModel, Equatable {
         let id: Int
         let user: Model.User
         let body: String
@@ -117,6 +121,10 @@ extension Model {
             case body
             case createdAt = "created_at"
             case updatedAt = "updated_at"
+        }
+        
+        static func ==(lhs: Model.Comment, rhs: Model.Comment) -> Bool {
+            return lhs.id == rhs.id
         }
     }
 }

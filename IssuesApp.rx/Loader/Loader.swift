@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class Loader <ModelType: ListableModel> {
+class Loader <ModelType: ListableModel & Equatable> {
     typealias SectionModelType = SectionModel<Int, ModelType>
     
     fileprivate var nextPageID: Int = 1
@@ -88,6 +88,21 @@ class Loader <ModelType: ListableModel> {
         let items: [ModelType] = value[0].items
         let data = items[indexPath.item]
         return data
+    }
+    
+    func index(of item: ModelType) -> IndexPath? {
+        guard let value: [SectionModelType] = try? datasourceOut.value() else { return nil }
+        guard let index = value[0].items.index(of: item) else { return nil }
+        let indexPath = IndexPath(item: index, section: 0)
+        return indexPath
+    }
+
+    func replace(item: ModelType, indexPath: IndexPath) {
+        guard let value: [SectionModelType] = try? datasourceOut.value() else { return }
+        var items: [ModelType] = value[0].items
+        items[indexPath.item] = item
+        datasourceOut.onNext([SectionModelType(model: 0, items: items)])
+        
     }
     
     func registerLoadMore(collectionView: UICollectionView) {
