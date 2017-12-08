@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxKeyboard
 
 class IssueDetailViewController: UIViewController {
     
@@ -17,6 +18,9 @@ class IssueDetailViewController: UIViewController {
     typealias DataSourceType = RxCollectionViewSectionedReloadDataSource<CommentSectionModel>
     
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet weak var inputViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var commentTextField: UITextField!
     
     let estimateCell: CommentCell = CommentCell.cellFromNib
     let refreshControl = UIRefreshControl()
@@ -66,6 +70,38 @@ extension IssueDetailViewController {
         if let reload = parentViewReload {
             loader.issueChangedObservable.bind(to: reload).disposed(by: disposeBag)
         }
+        
+        RxKeyboard.instance.visibleHeight
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                guard let `self` = self else { return }
+                var actualKeyboardHeight = keyboardVisibleHeight
+                if #available(iOS 11.0, *), keyboardVisibleHeight > 0 {
+                    actualKeyboardHeight -= self.view.safeAreaInsets.bottom
+                }
+                
+                self.inputViewBottomConstraint.constant = actualKeyboardHeight
+                
+                self.view.setNeedsLayout()
+                UIView.animate(withDuration: 0) {
+                    self.collectionView.contentInset.bottom = keyboardVisibleHeight + 46
+                    self.collectionView.scrollIndicatorInsets.bottom = self.collectionView.contentInset.bottom
+                    self.view.layoutIfNeeded()
+                }
+            })
+            .disposed(by: self.disposeBag)
+        
+        RxKeyboard.instance.willShowVisibleHeight.map { [weak self] keyboardVisibleHeight -> CGFloat in
+            guard let collectionView = self?.collectionView else { return 0.0}
+            let remainContentsHeight = collectionView.frame.height - 64 - keyboardVisibleHeight - 46
+            if collectionView.contentOffset.y + remainContentsHeight + keyboardVisibleHeight <= collectionView.contentSize.height {
+                return keyboardVisibleHeight
+            } else {
+                return collectionView.contentSize.height - remainContentsHeight
+            }
+            }.filter { $0 > 0 }.drive(onNext: { [weak self] differ in
+                guard let `self` = self else { return }
+                self.collectionView.contentOffset.y += differ
+            }).disposed(by: self.disposeBag)
         
     }
 }
