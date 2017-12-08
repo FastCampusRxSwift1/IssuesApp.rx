@@ -52,6 +52,16 @@ extension Model.Issue {
     }
 }
 
+extension Model.Issue.State {
+    var color: UIColor {
+        switch  self {
+        case .open:
+            return UIColor(red: 131/255, green: 189/255, blue: 71/255, alpha: 1)
+        case .closed:
+            return UIColor(red: 176/255, green: 65/255, blue: 32/255, alpha: 1)
+        }
+    }
+}
 
 extension Model {
     struct User: Codable {
