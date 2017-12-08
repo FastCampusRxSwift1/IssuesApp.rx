@@ -71,6 +71,7 @@ extension IssueDetailViewController {
             loader.issueChangedObservable.bind(to: reload).disposed(by: disposeBag)
         }
         
+        // 키보드 높이에 맞춰서 컨텐츠 높이도 변경.
         RxKeyboard.instance.visibleHeight
             .drive(onNext: { [weak self] keyboardVisibleHeight in
                 guard let `self` = self else { return }
@@ -87,21 +88,39 @@ extension IssueDetailViewController {
                     self.collectionView.scrollIndicatorInsets.bottom = self.collectionView.contentInset.bottom
                     self.view.layoutIfNeeded()
                 }
-            })
-            .disposed(by: self.disposeBag)
+            }).disposed(by: self.disposeBag)
         
-        RxKeyboard.instance.willShowVisibleHeight.map { [weak self] keyboardVisibleHeight -> CGFloat in
-            guard let collectionView = self?.collectionView else { return 0.0}
-            let remainContentsHeight = collectionView.frame.height - 64 - keyboardVisibleHeight - 46
-            if collectionView.contentOffset.y + remainContentsHeight + keyboardVisibleHeight <= collectionView.contentSize.height {
-                return keyboardVisibleHeight
-            } else {
-                return collectionView.contentSize.height - remainContentsHeight
-            }
+        // 키보드가 올라올때 따라서 컨텐츠도 올림.
+        RxKeyboard.instance.willShowVisibleHeight
+            .map { [weak self] keyboardVisibleHeight -> CGFloat in
+                guard let collectionView = self?.collectionView else { return 0.0}
+                let remainContentsHeight = collectionView.frame.height - 64 - keyboardVisibleHeight - 46
+                // 상단 사이즈 + 키보드사이즈 + 입력뷰  제외한 컨텐츠 영역
+                
+                // 스크롤 위치 + 컨텐츠 영역 + 키보드 높이가   컨텐츠 사이즈보다 작으면,  즉 스크롤 될 여지가 있으면.
+                if collectionView.contentOffset.y + remainContentsHeight + keyboardVisibleHeight <= collectionView.contentSize.height {
+                    return keyboardVisibleHeight // 키보드 만큼 올림.
+                } else {
+                    return collectionView.contentSize.height - remainContentsHeight // 남은 만큼 올림.
+                }
             }.filter { $0 > 0 }.drive(onNext: { [weak self] differ in
                 guard let `self` = self else { return }
                 self.collectionView.contentOffset.y += differ
             }).disposed(by: self.disposeBag)
+        
+        sendButton.rx.tap.asObservable().throttle(0.2, scheduler: MainScheduler.instance)
+            .withLatestFrom(self.commentTextField.rx.text.orEmpty)
+            .filter { !$0.isEmpty }
+            .bind(to: loader.postComment)
+            .disposed(by: disposeBag)
+        
+        loader.postDone.subscribe(onNext: { [weak self] _ in
+            guard let `self` = self else { return }
+            self.commentTextField.text = nil
+            self.commentTextField.resignFirstResponder()
+            let itemCount = self.collectionView.numberOfItems(inSection: 0)
+            self.collectionView.scrollToItem(at: IndexPath(item: itemCount-1, section: 0), at: .bottom, animated: false)
+        }).disposed(by: disposeBag)
         
     }
 }

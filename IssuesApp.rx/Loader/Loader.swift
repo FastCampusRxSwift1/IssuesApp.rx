@@ -20,7 +20,7 @@ class Loader <ModelType: ListableModel & Equatable> {
     var refreshControl: UIRefreshControl?
     var loadMoreCell: LoadMoreCell?
     fileprivate var apiCall: PublishSubject<Int> = PublishSubject()
-    fileprivate let datasourceIn: BehaviorSubject<[ModelType]> = BehaviorSubject(value: [])
+    let datasourceIn: BehaviorSubject<[ModelType]> = BehaviorSubject(value: [])
     fileprivate let datasourceOut: BehaviorSubject<[SectionModelType]> = BehaviorSubject(value: [SectionModelType(model: 0, items: [])])
     
     var disposeBag: DisposeBag = DisposeBag()

@@ -103,4 +103,15 @@ struct GitHubAPI: API {
             }.subscribeOn(MainScheduler.instance)
     }
     
+    func postComment(owner: String, repo: String, number: Int, comment: String) -> Observable<Model.Comment> {
+        let parameters: Parameters = ["body": comment]
+        return GitHubRouter.postComment(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters)
+            .flatMap { data -> Observable<Model.Comment> in
+                guard let comment = try? self.decoder.decode(Model.Comment.self, from: data) else {
+                    return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+                }
+                return Observable.just(comment)
+            }.subscribeOn(MainScheduler.instance)
+    }
+    
 }
