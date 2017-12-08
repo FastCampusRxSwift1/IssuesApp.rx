@@ -153,7 +153,7 @@ extension JSON {
         case "closed":
             json["state"].string = "closed"
         default:
-            json["state"].string = "none"
+            json["state"].string = "open"
         }
         let created_at = (self["created_on"].stringValue.components(separatedBy: ".").first ?? "")+"Z"
         json["created_at"].string = created_at
