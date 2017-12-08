@@ -29,6 +29,7 @@ class IssuesViewController: UIViewController, SeguewayConstantable {
     var disposeBag: DisposeBag = DisposeBag()
     var loader: IssuesLoader = IssuesLoader()
     var reloadIssueSubject: PublishSubject<Model.Issue> = PublishSubject()
+    fileprivate var reloadSubject: PublishSubject<Void> = PublishSubject()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +58,8 @@ class IssuesViewController: UIViewController, SeguewayConstantable {
             viewController.issue = issue
             break
         case .presentToCreateIssueSegue:
-//            guard let navigationController = segue.destination as? UINavigationController, let viewController = navigationController.topViewController as? CreateIssueViewController else { return }
-//            viewController.reloadSubject = reloadSubject
+            guard let navigationController = segue.destination as? UINavigationController, let viewController = navigationController.topViewController as? CreateIssueViewController else { return }
+            viewController.reloadSubject = reloadSubject
             break
         }
     }
@@ -86,6 +87,9 @@ extension IssuesViewController {
                 guard let indexPath = self.loader.index(of: issue) else { return }
                 self.loader.replace(item: issue, indexPath: indexPath)
             }).disposed(by: disposeBag)
+        reloadSubject.subscribe(onNext: { [weak self] _ in
+            self?.loader.refresh()
+        }).disposed(by: disposeBag)
     }
 }
 

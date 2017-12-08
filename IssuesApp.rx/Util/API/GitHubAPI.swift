@@ -114,4 +114,14 @@ struct GitHubAPI: API {
             }.subscribeOn(MainScheduler.instance)
     }
     
+    func postIssue(owner: String, repo: String, title: String, body: String) -> Observable<Model.Issue> {
+        let parameters: Parameters = ["title":title, "body": body]
+        return GitHubRouter.postIssue(owner: owner, repo: repo).buildRequest(parameters: parameters).flatMap{ data -> Observable<Model.Issue> in
+            guard let issue = try? self.decoder.decode(Model.Issue.self, from: data) else {
+                return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+            }
+            return Observable.just(issue)
+            }.subscribeOn(MainScheduler.instance)
+    }
+    
 }

@@ -15,6 +15,7 @@ enum GitHubRouter {
     case issueComment(owner: String, repo: String, number: Int)
     case editIssue(owner: String, repo: String, number: Int)
     case postComment(owner: String, repo: String, number: Int)
+    case postIssue(owner: String, repo: String)
 }
 
 extension GitHubRouter {
@@ -48,6 +49,8 @@ extension GitHubRouter {
             return "/repos/\(owner)/\(repo)/issues/\(number)"
         case let .postComment(owner, repo, number):
             return "/repos/\(owner)/\(repo)/issues/\(number)/comments"
+        case let .postIssue(owner, repo):
+            return "/repos/\(owner)/\(repo)/issues"
         }
     }
     
@@ -63,7 +66,8 @@ extension GitHubRouter {
             return .get
         case .editIssue:
             return .patch
-        case .postComment:
+        case .postComment,
+             .postIssue:
             return .post
         }
     }
@@ -74,7 +78,8 @@ extension GitHubRouter {
              .issueComment:
             return URLEncoding.default
         case .editIssue,
-             .postComment:
+             .postComment,
+             .postIssue:
             return JSONEncoding.default
         }
     }

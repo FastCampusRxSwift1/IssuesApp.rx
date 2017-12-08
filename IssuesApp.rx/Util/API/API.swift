@@ -16,4 +16,5 @@ protocol API {
     func issueComment(owner: String, repo: String, number: Int) -> (Int) -> Observable<[Model.Comment]>
     func toggleIssueState(owner: String, repo: String, number: Int, issue: Model.Issue) -> Observable<Model.Issue>
     func postComment(owner: String, repo: String, number: Int, comment: String) -> Observable<Model.Comment>
+    func postIssue(owner: String, repo: String, title: String, body: String) -> Observable<Model.Issue>
 }
