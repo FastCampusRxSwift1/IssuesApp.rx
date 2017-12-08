@@ -165,7 +165,7 @@ extension GlobalState.ServiceType {
         case .github:
             return GitHubAPI()
         case .bitbucket:
-            return BitbucketAPI()
+            return BitBucketAPI()
         }
     }
 }

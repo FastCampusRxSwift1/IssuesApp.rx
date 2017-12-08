@@ -75,10 +75,53 @@ struct GitHubAPI: API {
             let parameters: Parameters = ["page": page, "state": "all"]
             return GitHubRouter.repoIssues(owner: owner, repo: repo).buildRequest(parameters: parameters).map { data in
                 guard let issues = try? self.decoder.decode([Model.Issue].self, from: data) else { return [] }
-                print(String(data: data, encoding: .utf8))
                 return issues
                 }.subscribeOn(MainScheduler.instance)
         }
+    }
+    
+    func issueComment(owner: String, repo: String, number: Int) -> (Int) -> Observable<[Model.Comment]> {
+        return { page in
+            let parameters = ["page": page]
+            return GitHubRouter.issueComment(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters).map { data in
+                guard let comments = try? self.decoder.decode([Model.Comment].self, from: data) else { return [] }
+                return comments
+                }.subscribeOn(MainScheduler.instance)
+        }
+    }
+    
+    func toggleIssueState(owner: String, repo: String, number: Int, issue: Model.Issue) -> Observable<Model.Issue> {
+        let nextState: Model.Issue.State = issue.state == Model.Issue.State.open ? .closed : .open
+        let updatedIssue = issue.update(state: nextState)
+        let parameters = (try? updatedIssue.asDictionary()) ?? Parameters()
+        print("parameters: \(parameters)")
+        return GitHubRouter.editIssue(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters).flatMap { data -> Observable<Model.Issue> in
+            guard let issue = try? self.decoder.decode(Model.Issue.self, from: data) else {
+                return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+            }
+            return Observable.just(issue)
+            }.subscribeOn(MainScheduler.instance)
+    }
+    
+    func postComment(owner: String, repo: String, number: Int, comment: String) -> Observable<Model.Comment> {
+        let parameters: Parameters = ["body": comment]
+        return GitHubRouter.postComment(owner: owner, repo: repo, number: number).buildRequest(parameters: parameters)
+            .flatMap { data -> Observable<Model.Comment> in
+                guard let comment = try? self.decoder.decode(Model.Comment.self, from: data) else {
+                    return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+                }
+                return Observable.just(comment)
+            }.subscribeOn(MainScheduler.instance)
+    }
+    
+    func postIssue(owner: String, repo: String, title: String, body: String) -> Observable<Model.Issue> {
+        let parameters: Parameters = ["title":title, "body": body]
+        return GitHubRouter.postIssue(owner: owner, repo: repo).buildRequest(parameters: parameters).flatMap{ data -> Observable<Model.Issue> in
+            guard let issue = try? self.decoder.decode(Model.Issue.self, from: data) else {
+                return Observable.error(NSError(domain: "error", code: 1001, userInfo: nil))
+            }
+            return Observable.just(issue)
+            }.subscribeOn(MainScheduler.instance)
     }
     
 }

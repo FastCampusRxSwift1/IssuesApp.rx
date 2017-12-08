@@ -35,7 +35,7 @@ extension LoginViewController {
             }).disposed(by: disposeBag)
         
         loginToBitBucketButton.rx.tap.flatMap { _ -> Observable<Void> in
-            App.api = BitbucketAPI()
+            App.api = BitBucketAPI()
             GlobalState.instance.service = .bitbucket
             return App.api.getToken()
             }.subscribe(onError: { [weak self] error in

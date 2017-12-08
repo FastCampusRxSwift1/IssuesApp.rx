@@ -12,6 +12,10 @@ import Alamofire
 
 enum GitHubRouter {
     case repoIssues(owner: String, repo: String)
+    case issueComment(owner: String, repo: String, number: Int)
+    case editIssue(owner: String, repo: String, number: Int)
+    case postComment(owner: String, repo: String, number: Int)
+    case postIssue(owner: String, repo: String)
 }
 
 extension GitHubRouter {
@@ -39,6 +43,14 @@ extension GitHubRouter {
         switch self {
         case let .repoIssues(owner, repo):
             return "/repos/\(owner)/\(repo)/issues"
+        case let .issueComment(owner, repo, number):
+            return "/repos/\(owner)/\(repo)/issues/\(number)/comments"
+        case let .editIssue(owner, repo, number):
+            return "/repos/\(owner)/\(repo)/issues/\(number)"
+        case let .postComment(owner, repo, number):
+            return "/repos/\(owner)/\(repo)/issues/\(number)/comments"
+        case let .postIssue(owner, repo):
+            return "/repos/\(owner)/\(repo)/issues"
         }
     }
     
@@ -49,15 +61,26 @@ extension GitHubRouter {
     
     var method: HTTPMethod {
         switch self {
-        case .repoIssues:
+        case .repoIssues,
+             .issueComment:
             return .get
+        case .editIssue:
+            return .patch
+        case .postComment,
+             .postIssue:
+            return .post
         }
     }
     
     var parameterEncoding: ParameterEncoding {
         switch self {
-        case .repoIssues:
+        case .repoIssues,
+             .issueComment:
             return URLEncoding.default
+        case .editIssue,
+             .postComment,
+             .postIssue:
+            return JSONEncoding.default
         }
     }
     
