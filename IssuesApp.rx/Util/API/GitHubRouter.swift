@@ -104,6 +104,7 @@ extension GitHubRouter {
                         anyObserver.onError(error)
                         
                     default:
+                        print("dataResponse.error : \(dataResponse.description)")
                         let error = NSError(domain: "error", code: response.statusCode, userInfo: [:])
                         print("error: \(error)")
                         anyObserver.onError(error)

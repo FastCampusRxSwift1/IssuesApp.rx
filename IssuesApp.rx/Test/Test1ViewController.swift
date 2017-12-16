@@ -44,6 +44,7 @@ class Test1ViewController: UIViewController {
             self.label.rx.text.onNext(value)
         }.disposed(by: disposeBag)
         
+        
 //        GlobalState.instance.rx.owner.bind(to: label.rx.text).disposed(by: disposeBag)
         
     }

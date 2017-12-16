@@ -89,7 +89,8 @@ extension IssueDetailHeaderCell {
             verticalFittingPriority: UILayoutPriority.defaultLow
         )
         let width = size.width == 0 ? IssueDetailHeaderCell.estimateSizeCell.bounds.width : size.width
-        let height = size.height == 0 ? IssueDetailHeaderCell.estimateSizeCell.bounds.height : size.height
+        let height = size.height == 0 
+            ? IssueDetailHeaderCell.estimateSizeCell.bounds.height : size.height
         let cellSize = CGSize(width: width, height: height)
         return cellSize
     }

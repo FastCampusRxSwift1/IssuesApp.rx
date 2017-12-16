@@ -14,7 +14,11 @@ struct Model {
 }
 
 extension Model {
-    struct Issue: Codable {
+    struct Issue: Codable, Equatable {
+        static func ==(lhs: Model.Issue, rhs: Model.Issue) -> Bool {
+            return lhs.id == rhs.id
+        }
+        
         let id: Int
         let number: Int
         let title: String
@@ -100,7 +104,11 @@ extension Model {
 }
 
 extension Model {
-    public struct Comment: Codable {
+    public struct Comment: Codable, Equatable {
+        public static func ==(lhs: Model.Comment, rhs: Model.Comment) -> Bool {
+            return lhs.id == rhs.id
+        }
+        
         let id: Int
         let user: Model.User
         let body: String

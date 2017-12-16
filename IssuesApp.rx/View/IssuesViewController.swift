@@ -11,30 +11,21 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class IssuesViewController: UIViewController {
+class IssuesViewController: UIViewController, SeguewayConstantable {
+    enum Constants:String {
+        case pushToDetail
+    }
+    
 
     typealias IssueSectionModel = SectionModel<Int, Model.Issue>
     typealias DataSourceType = RxCollectionViewSectionedReloadDataSource<IssueSectionModel>
     
     @IBOutlet var collectionView: UICollectionView!
-    
     let estimateCell: IssueCell = IssueCell.cellFromNib
-    let datasourceIn: BehaviorSubject<[Model.Issue]> = BehaviorSubject(value: [])
-    let datasourceOut: BehaviorSubject<[IssueSectionModel]> = BehaviorSubject(value: [IssueSectionModel(model: 0, items: [])])
     let refreshControl = UIRefreshControl()
-    
-    var canLoadMore: Bool = true
-    var loadMoreCell: LoadMoreCell?
     var disposeBag: DisposeBag = DisposeBag()
-    var isLoading: Bool = false
-    var apiCall: PublishSubject<Int> = PublishSubject()
-    var page: Int = 1
-    
-    lazy var api: (Int) -> Observable<[Model.Issue]> = { () -> (Int) -> Observable<[Model.Issue]> in
-        let owner = GlobalState.instance.owner
-        let repo = GlobalState.instance.repo
-        return App.api.repoIssues(owner: owner, repo: repo)
-    }()
+    var loader: IssuesLoader = IssuesLoader()
+    var reloadIssueSubject: PublishSubject<Model.Issue> = PublishSubject()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,65 +43,39 @@ class IssuesViewController: UIViewController {
         self.title = "\(owner)/\(repo)"
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let segueIdentifier: Constants = Constants(rawValue: segue.identifier ?? "") ?? .pushToDetail
+        switch segueIdentifier {
+        case .pushToDetail:
+            guard let issue = sender as? Model.Issue else { return }
+            guard let viewController = segue.destination as? IssueDetailViewController else { return }
+            viewController.issue = issue
+            viewController.parentViewReload = reloadIssueSubject
+        }
+    }
 }
 
 extension IssuesViewController {
     func bind() {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
-        
-         datasourceIn.asObservable().skip(1)
-            .scan([], accumulator: { (old: [Model.Issue], new: [Model.Issue]) -> [Model.Issue] in
-                return old + new
-            }).map { (issues) -> [IssueSectionModel] in
-                return [IssueSectionModel(model: 0, items: issues)]
-            }.bind(to: datasourceOut).disposed(by: disposeBag)
-        
-        datasourceOut.asObservable()
-            .do(onNext: { [weak self] issues in
-                guard let `self` = self else { return }
-                self.page += 1
-                self.refreshControl.endRefreshing()
-                if issues.isEmpty {
-                    self.canLoadMore = false
-                    self.loadMoreCell?.loadDone()
-                }
-            }).bind(to: collectionView.rx.items(dataSource: createDatasource()))
-            .disposed(by: disposeBag)
-        
-        apiCall.flatMap {[unowned self ] page -> Observable<[Model.Issue]> in
-            return self.api(page)
-            }.do(onNext: { [weak self] (_) in
-                self?.isLoading = false
-                }, onError: { [weak self] _ in
-                    self?.isLoading = false
-            }).catchError({ (error) -> Observable<[Model.Issue]> in
-                return Observable.just([])
-            }).bind(to: datasourceIn)
-            .disposed(by: disposeBag)
-        
-        refreshControl.rx.controlEvent(.valueChanged)
-            .subscribe(onNext: { [weak self] () in
-                self?.refresh()
-            }).disposed(by: disposeBag)
-        
-        collectionView.rx.willDisplayCell.asObservable()
-            .subscribe(onNext: { [weak self] (_, indexPath: IndexPath) in
-                self?.loadMore(indexPath: indexPath)
-            }).disposed(by: disposeBag)
-        
-        loadData()
-        
+        loader.bind()
+        loader.register(refreshControl: refreshControl)
+        loader.registerLoadMore(collectionView: collectionView)
+        loader.datasource.bind(to:collectionView.rx.items(dataSource: createDatasource())).disposed(by: disposeBag)
+        collectionView.rx.itemSelected.asObservable().subscribe(onNext: { [weak self] (indexPath) in
+            guard let `self` = self else { return }
+            guard let issue = self.loader.item(at: indexPath) else { return }
+            self.performSegue(withIdentifier: Constants.pushToDetail.rawValue, sender: issue)
+        }).disposed(by: disposeBag)
+        reloadIssueSubject.subscribe(onNext: { [weak self] (issue) in
+            guard let `self` = self else { return }
+            guard let indexPath = self.loader.index(of: issue) else { return }
+            self.loader.replace(item: issue, indexPath: indexPath)
+        }).disposed(by: disposeBag)
     }
 }
 
 extension IssuesViewController {
-    
-    func loadData() {
-        guard isLoading == false else { return }
-        isLoading = true
-        apiCall.onNext(page)
-    }
-    
     func createDatasource() -> DataSourceType {
         let datasource = DataSourceType(configureCell: { (datasource, collectionView, indexPath, item) -> UICollectionViewCell in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IssueCell", for: indexPath) as? IssueCell else {
@@ -128,7 +93,7 @@ extension IssuesViewController {
                 return UICollectionReusableView()
             case UICollectionElementKindSectionFooter:
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LoadMoreCell", for: indexPath) as? LoadMoreCell ?? LoadMoreCell()
-                self.loadMoreCell = footerView
+                self.loader.register(loadMoreCell: footerView)
                 return footerView
             default:
                 assertionFailure()
@@ -137,27 +102,11 @@ extension IssuesViewController {
         }
         return datasource
     }
-    
-    func refresh() {
-        page = 1
-        disposeBag = DisposeBag()
-        canLoadMore = true
-        loadMoreCell?.load()
-        bind()
-    }
-    
-    func loadMore(indexPath: IndexPath) {
-        guard let value = try? datasourceOut.value() else { return }
-        guard  indexPath.item == value[0].items.count - 1 && !isLoading && canLoadMore else { return }
-        loadData()
-    }
 }
 
 extension IssuesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let value = try? datasourceOut.value() else { return CGSize.zero }
-        let items: [Model.Issue] = value[0].items
-        let data = items[indexPath.item]
+        guard let data = loader.item(at: indexPath) else { return CGSize.zero }
         estimateCell.update(data: data)
         let targetSize =  CGSize(width: collectionView.frame.size.width, height: 50)
         let estimatedSize = estimateCell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: UILayoutPriority.required, verticalFittingPriority: UILayoutPriority.defaultLow)
